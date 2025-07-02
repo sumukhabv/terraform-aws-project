@@ -8,12 +8,6 @@ pipeline {
     }
 
    stages {
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/sumukhabv/terraform-aws-project.git'
-            }
-        }
-
 	stage('Terraform Init') {
             steps {
                 sh 'terraform init'
