@@ -3,8 +3,6 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
-        AWS_ACCESS_KEY_ID = credentials('aws_credentials')
-        AWS_SECRET_ACCESS_KEY = credentials('aws_credentials')
     }
 
    stages {
@@ -21,13 +19,21 @@ pipeline {
         }
 	
 	stage('Terraform Plan') {
-            steps {
+        environment {
+                AWS_ACCESS_KEY_ID     = credentials('aws_credentials').username
+                AWS_SECRET_ACCESS_KEY = credentials('aws_credentials').password
+            }   
+	 steps {
                 sh 'terraform plan -out=tfplan'
             }
         }
 
         stage('Terraform Apply') {
-            steps {
+        environment {
+                AWS_ACCESS_KEY_ID     = credentials('aws_credentials').username
+                AWS_SECRET_ACCESS_KEY = credentials('aws_credentials').password
+            }
+	  steps {
                 sh 'terraform apply --auto-approve tfplan'
             }
         }
